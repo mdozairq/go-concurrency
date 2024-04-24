@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 )
+
+//channel without goroutine will panic a error
  
 func main(){
 	ch := make(chan string)
