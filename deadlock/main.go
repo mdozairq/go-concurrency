@@ -11,7 +11,7 @@ func main() {
 		fmt.Println("Process complete after:", time.Since(start))
 	}()
 	time.Sleep(time.Second * 2)
-	channel := make(chan bool)
+	channel := make(chan bool, 2)
 	name := "Ozair"
 	go xyz(name, channel)
 	channel <- false
