@@ -11,6 +11,10 @@ import (
 // 	noCopy noCopy
 // }
 
+// type WaitJar interface{
+
+// }
+
 func main(){
 	gettingReadyForMission()
 }
@@ -19,14 +23,19 @@ var ready bool
 
 
 func gettingReadyForMissionWithCond(){
-	// cond := sync.NewCond(&sync.Mutex{})
-
-	go gettingReady()
+	cond := sync.NewCond(&sync.Mutex{})
+	go gettingReadyWithCond(cond)
+	// go gettingReady()
 	workIntervals := 0
+	cond.L.Lock()
+
 	for !ready {
-		time.Sleep(time.Second * 5)
+		// time.Sleep(time.Second * 5)
 		workIntervals++
+		cond.Wait()
 	}
+
+	cond.L.Unlock()
 
 	fmt.Printf("We are now ready! After %d work intervals \n", workIntervals)
 }
@@ -40,6 +49,12 @@ func gettingReadyForMission(){
 	}
 
 	fmt.Printf("We are now ready! After %d work intervals \n", workIntervals)
+}
+
+func gettingReadyWithCond(cond *sync.Cond){
+	sleep()
+	ready=true
+	cond.Signal()
 }
 
 func gettingReady(){
